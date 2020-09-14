@@ -1,0 +1,28 @@
+---
+name: 'test-patch'
+description: 'Apache Yetus precommit patch testing'
+inputs:
+  sourcedir:
+    description: 'Directory location of source'
+    requried: true
+    default: "${GITHUB_WORKSPACE}"
+  patchdir:
+    description: 'Directory location of logs, temp space, etc'
+    required: true
+    default: "/tmp/yetus"
+  buildtool:
+    description: 'Name of build tool plug-in to use'
+    required: true
+    default: "nobuild"
+runs:
+  using: 'docker'
+  image: 'Dockerfile'
+  args:
+    - --basedir=${{ inputs.sourcedir }}
+    - --patch-dir=${{ inputs.patchdir }}
+    - --brief-report-file=${{ inputs.patchdir }}/brief.txt
+    - --console-report-file=${{ inputs.patchdir }}/console.txt
+    - --html-report-file=${{ inputs.patchdir }}/report.html
+    - --junit-report-xml=${{ inputs.patchdir }}/junit-report.xml
+    - --plugins=all
+    - --build-tool=${{ inputs.buildtool }}
